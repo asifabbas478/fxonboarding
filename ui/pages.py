@@ -98,7 +98,8 @@ def render_facility_page(namespace):
     facility_file = st.file_uploader("Upload Facility File (Excel)", type=['xlsx'])
     if facility_file:
         try:
-            result = process_facility_data(facility_file)
+            template_file = "templates/facility_template.csv"
+            result = process_facility_data(facility_file, template_file, namespace)
             if result is not None:
                 show_preview_table(result)
                 st.success("Facility file processed successfully!")

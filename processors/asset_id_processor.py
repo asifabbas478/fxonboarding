@@ -1,10 +1,11 @@
+"""Asset ID generation processor"""
 from typing import Dict, Optional, List
 import re
 import streamlit as st
 import pandas as pd
 from collections import defaultdict
 from utils.column_mapping import validate_columns, apply_column_mapping, clean_text_for_id
-from utils.equipment_abbreviations import get_equipment_abbreviation
+from utils.abbreviation_service import get_abbreviation
 
 def _clean_id_part(text: str) -> str:
     """Clean and standardize ID part"""
@@ -20,29 +21,27 @@ def _abbreviate_building(name: str, max_len: int = 4) -> str:
     """Create an abbreviation for building name"""
     if not name:
         return ''
-    
-    # Split into words and take first letter of each word
-    words = name.split()
-    if len(words) > 1:
-        abbr = ''.join(word[0] for word in words if word)
-        return abbr[:max_len].upper()
-    
-    # If single word, take first max_len characters
-    return name[:max_len].upper()
+    return get_abbreviation(name, max_len, 'location')
 
 def _get_equipment_code(row: pd.Series) -> str:
     """Get equipment code based on Asset/Equipment or Asset System"""
     # First try Asset/Equipment
     equipment = str(row.get('Asset / Equipment', '')).strip()
     if equipment and equipment.lower() != 'none':
-        return get_equipment_abbreviation(equipment)
+        return get_abbreviation(equipment, 4, 'equipment')
     
     # If no equipment, try Asset System
     system = str(row.get('Asset System', '')).strip()
     if system and system.lower() != 'none':
-        return get_equipment_abbreviation(system)
+        return get_abbreviation(system, 4, 'equipment')
     
     return 'EQP'  # Default if no valid value found
+
+def _get_location_code(text: str, max_len: int = 4) -> str:
+    """Get abbreviated location code"""
+    if not text:
+        return ''
+    return get_abbreviation(text, max_len, 'location')
 
 def generate_location_id(row: pd.Series, enabled: bool) -> str:
     """Generate location ID from Building and Floor"""
@@ -55,7 +54,6 @@ def generate_location_id(row: pd.Series, enabled: bool) -> str:
     if not building or not floor:
         return ''
     
-    # Create abbreviation for building (e.g., "Nobles Residential Compound" -> "NRC")
     building_code = _abbreviate_building(building)
     
     return f"{building_code}-{floor}"
@@ -65,53 +63,59 @@ def generate_space_id(row: pd.Series, enabled: bool) -> str:
     if not enabled:
         return ''
         
-    location_id = generate_location_id(row, True)  # Always generate location part
-    sublocation = _clean_id_part(str(row.get('Sublocation', '')).strip())
+    location_id = generate_location_id(row, True)
+    sublocation = str(row.get('Sublocation', '')).strip()
     
     if not location_id or not sublocation:
         return ''
     
-    return f"{location_id}-{sublocation}"
+    # Get abbreviated sublocation code
+    subloc_code = _get_location_code(sublocation)
+    
+    return f"{location_id}-{subloc_code}"
 
 def generate_subspace_id(row: pd.Series, enabled: bool) -> str:
     """Generate subspace ID from Building, Floor, Sublocation, and Subspace"""
     if not enabled:
         return ''
         
-    space_id = generate_space_id(row, True)  # Always generate space part
+    space_id = generate_space_id(row, True)
     subspace = str(row.get('Subspace', '')).strip()
     
     if not space_id or not subspace:
         return ''
     
-    # Replace spaces with underscores in subspace
-    subspace = _clean_id_part(subspace)
+    # Get abbreviated subspace code
+    subspace_code = _get_location_code(subspace)
     
-    return f"{space_id}-{subspace}"
+    return f"{space_id}-{subspace_code}"
 
 def generate_equipment_id(row: pd.Series, counters: defaultdict, enabled: bool) -> str:
     """Generate equipment ID with full hierarchy and smart numbering"""
     if not enabled:
         return ''
     
-    # Get all components
+    # Get all components with abbreviated codes
     location_id = generate_location_id(row, True)
     if not location_id:
         return ''
     
-    space_id = generate_space_id(row, True)
-    if not space_id:
-        return ''
+    sublocation = str(row.get('Sublocation', '')).strip()
+    subloc_code = _get_location_code(sublocation) if sublocation else ''
     
-    subspace_id = generate_subspace_id(row, True)
-    if not subspace_id:
-        return ''
+    subspace = str(row.get('Subspace', '')).strip()
+    subspace_code = _get_location_code(subspace) if subspace else ''
     
     # Get equipment code
     equipment_code = _get_equipment_code(row)
     
     # Create base ID without number
-    base_id = f"{location_id}-{space_id.split('-')[-1]}-{subspace_id.split('-')[-1]}-{equipment_code}"
+    base_id = f"{location_id}"
+    if subloc_code:
+        base_id += f"-{subloc_code}"
+    if subspace_code:
+        base_id += f"-{subspace_code}"
+    base_id += f"-{equipment_code}"
     
     # Get counter for this combination
     counter = counters[base_id]
