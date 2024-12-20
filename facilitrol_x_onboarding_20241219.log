@@ -28,3 +28,26 @@
 2024-12-20 09:22:58,604 - INFO - Starting equipment data processing
 2024-12-20 09:23:06,362 - WARNING - Found 10 non-standard equipment types/classes
 2024-12-20 09:23:06,363 - INFO - Processed 98 equipment records successfully
+2024-12-20 09:56:08,735 - INFO - Starting equipment data processing
+2024-12-20 09:56:12,469 - WARNING - Found 10 non-standard equipment types/classes
+2024-12-20 09:56:12,469 - INFO - Processed 98 equipment records successfully
+2024-12-20 09:56:25,229 - INFO - Starting equipment data processing
+2024-12-20 09:56:28,421 - WARNING - Found 10 non-standard equipment types/classes
+2024-12-20 09:56:28,421 - INFO - Processed 98 equipment records successfully
+2024-12-20 09:57:15,316 - INFO - Starting equipment data processing
+2024-12-20 09:57:18,160 - WARNING - Found 10 non-standard equipment types/classes
+2024-12-20 09:57:18,161 - INFO - Processed 98 equipment records successfully
+2024-12-20 09:57:30,906 - INFO - Starting equipment data processing
+2024-12-20 09:57:31,184 - INFO - Processed 312 equipment records successfully
+2024-12-20 09:59:57,535 - INFO - Starting equipment data processing
+2024-12-20 10:00:00,488 - WARNING - Found 10 non-standard equipment types/classes
+2024-12-20 10:00:00,489 - INFO - Processed 98 equipment records successfully
+2024-12-20 10:01:25,826 - INFO - Starting equipment data processing
+2024-12-20 10:01:28,715 - ERROR - Error in process_equipment_data: 'int' object has no attribute 'lower'
+2024-12-20 10:01:45,673 - INFO - Starting equipment data processing
+2024-12-20 10:01:48,428 - WARNING - Found 10 non-standard equipment types/classes
+2024-12-20 10:01:48,429 - INFO - Processed 98 equipment records successfully
+2024-12-20 10:17:25,465 - INFO - Starting equipment data processing
+2024-12-20 10:17:32,074 - ERROR - Error in process_equipment_data: 'int' object has no attribute 'lower'
+2024-12-20 10:20:31,680 - INFO - Starting equipment data processing
+2024-12-20 10:22:18,372 - INFO - Starting equipment data processing

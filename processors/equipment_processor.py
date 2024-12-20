@@ -10,14 +10,15 @@ sys.path.insert(0, parent_dir)
 
 from utils.error_handler import handle_error, logger
 from utils.validation_constants import EQUIPMENT_TYPES, EQUIPMENT_CLASSES
+from utils.column_mapping import validate_columns, apply_column_mapping
 
 def validate_equipment_data(df, source_data):
     """Validate equipment types and classes in the dataframe"""
     warnings = []
     
     # Convert sets to case-insensitive for comparison
-    valid_types = {t.lower().strip() for t in EQUIPMENT_TYPES}
-    valid_classes = {c.lower().strip() for c in EQUIPMENT_CLASSES}
+    valid_types = {str(t).lower().strip() for t in EQUIPMENT_TYPES}
+    valid_classes = {str(c).lower().strip() for c in EQUIPMENT_CLASSES}
     
     # Track unique non-standard values for summary
     non_standard_classes = set()
@@ -26,18 +27,18 @@ def validate_equipment_data(df, source_data):
     # Check equipment class (Asset System)
     for idx, row in source_data.iterrows():
         asset_system = row['Asset System']
-        if pd.notna(asset_system) and asset_system != 'Mandatory':
-            if asset_system.lower().strip() not in valid_classes:
+        if pd.notna(asset_system) and str(asset_system).strip() != 'Mandatory':
+            if str(asset_system).lower().strip() not in valid_classes:
                 warnings.append(f"Row {idx + 2}: Non-standard equipment class '{asset_system}' in Asset System column")
-                non_standard_classes.add(asset_system)
+                non_standard_classes.add(str(asset_system))
     
     # Check equipment type (Asset / Equipment)
     for idx, row in source_data.iterrows():
         asset_equipment = row['Asset / Equipment']
-        if pd.notna(asset_equipment) and asset_equipment != 'Mandatory':
-            if asset_equipment.lower().strip() not in valid_types:
+        if pd.notna(asset_equipment) and str(asset_equipment).strip() != 'Mandatory':
+            if str(asset_equipment).lower().strip() not in valid_types:
                 warnings.append(f"Row {idx + 2}: Non-standard equipment type '{asset_equipment}' in Asset/Equipment column")
-                non_standard_types.add(asset_equipment)
+                non_standard_types.add(str(asset_equipment))
     
     if warnings:
         # Add summary of unique non-standard values
@@ -61,13 +62,23 @@ def validate_equipment_data(df, source_data):
     return warnings
 
 @handle_error
-def process_equipment_data(asset_location_file, equipment_template, namespace):
+def process_equipment_data(asset_location_file, equipment_template, namespace, column_mapping=None):
     """Process equipment data"""
     logger.info("Starting equipment data processing")
     
     # Load data
     asset_location_data = pd.read_excel(asset_location_file, sheet_name='Asset,location')
     template_data = pd.read_csv(equipment_template)
+    
+    # Validate columns and get missing/available columns
+    missing_columns, available_columns = validate_columns(asset_location_data, 'equipment')
+    
+    if missing_columns and not column_mapping:
+        return None, None, (missing_columns, available_columns)
+    
+    # Apply column mapping if provided
+    if column_mapping:
+        asset_location_data = apply_column_mapping(asset_location_data, column_mapping)
     
     # Extract unique equipment data
     unique_data = asset_location_data[
@@ -119,4 +130,4 @@ def process_equipment_data(asset_location_file, equipment_template, namespace):
         logger.warning(f"Found {len(validation_warnings)} non-standard equipment types/classes")
     
     logger.info(f"Processed {len(new_equipment_data)} equipment records successfully")
-    return updated_equipment_data, warning_file
+    return updated_equipment_data, warning_file, None
