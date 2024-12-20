@@ -1,0 +1,2 @@
+id,minRef,namespace*,namespace name,facility*,facility name,name*,reference,criticality,estimation.laborHours,estimation.laborCost,estimation.inventoryCost,isActive*
+,,,,,facility name,location name,,,,,,TRUE

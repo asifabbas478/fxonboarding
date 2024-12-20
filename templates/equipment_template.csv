@@ -1,0 +1,2 @@
+id,minRef,namespace*,namespace name,asset*,asset name,asset type,name*,reference,criticality,estimation.laborHours,estimation.laborCost,estimation.inventoryCost,isActive*,class*,equipmentType*,serialNumber,manufacturer,model,installationDate,expectedAgeMonth,warrantyProvider,warrantyProvider name,warrantyStartDate,warrantyEndDate
+,,,,,,,name,,,,,,TRUE,class,type,,,,,,,,,

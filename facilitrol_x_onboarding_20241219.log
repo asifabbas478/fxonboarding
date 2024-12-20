@@ -1,0 +1,30 @@
+2024-12-19 18:33:04,800 - INFO - Starting location data processing
+2024-12-19 18:33:08,191 - INFO - Processed 98 location records
+2024-12-19 18:50:42,308 - INFO - Starting equipment data processing
+2024-12-19 18:50:45,759 - ERROR - Error in process_equipment_data: "['Sublocation'] not in index"
+2024-12-19 18:51:03,735 - INFO - Starting equipment data processing
+2024-12-19 18:51:03,998 - INFO - Processed 312 equipment records successfully
+2024-12-19 18:53:13,308 - INFO - Starting equipment data processing
+2024-12-19 18:53:13,890 - WARNING - Found 2 validation errors in equipment data
+2024-12-19 18:53:21,637 - INFO - Starting equipment data processing
+2024-12-19 18:53:22,282 - WARNING - Found 2 validation errors in equipment data
+2024-12-19 18:53:51,193 - INFO - Starting equipment data processing
+2024-12-19 18:53:51,533 - WARNING - Found 2 validation errors in equipment data
+2024-12-19 18:54:46,578 - INFO - Starting equipment data processing
+2024-12-19 18:54:47,153 - WARNING - Found 2 validation errors in equipment data
+2024-12-19 18:59:12,032 - INFO - Starting equipment data processing
+2024-12-19 18:59:12,299 - INFO - Processed 312 equipment records successfully
+2024-12-20 09:17:45,688 - ERROR - Error in generate_asset_ids: Missing required columns: Location
+2024-12-20 09:18:19,374 - INFO - Generated 12486 asset IDs
+2024-12-20 09:18:59,780 - INFO - Starting equipment data processing
+2024-12-20 09:19:02,672 - ERROR - Error in process_equipment_data: "['Sublocation'] not in index"
+2024-12-20 09:19:27,956 - INFO - Starting equipment data processing
+2024-12-20 09:19:30,697 - WARNING - Found 6 validation errors in equipment data
+2024-12-20 09:19:36,758 - INFO - Starting equipment data processing
+2024-12-20 09:19:40,142 - WARNING - Found 6 validation errors in equipment data
+2024-12-20 09:22:43,815 - INFO - Starting equipment data processing
+2024-12-20 09:22:47,940 - WARNING - Found 10 non-standard equipment types/classes
+2024-12-20 09:22:47,941 - INFO - Processed 98 equipment records successfully
+2024-12-20 09:22:58,604 - INFO - Starting equipment data processing
+2024-12-20 09:23:06,362 - WARNING - Found 10 non-standard equipment types/classes
+2024-12-20 09:23:06,363 - INFO - Processed 98 equipment records successfully

@@ -1,0 +1,2 @@
+id,minRef,namespace*,namespace name,name*,reference,criticality,estimation.laborHours,estimation.laborCost,estimation.inventoryCost,facilityType*,facilityGroup,facilityGroup name,location.country,location.city,location.location,location.longitude,location.latitude,constructionDate,isActive*
+,,,,name,,,,,,facility type,,,,,,,,,TRUE
